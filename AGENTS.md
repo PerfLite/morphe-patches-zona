@@ -78,7 +78,14 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
 ## Release
 
 Publish the tag and the release asset only after the user has validated the patched app on
-device; `patches-bundle.json` on `main` is what Morph serves to every install. Release notes on
+device; `patches-bundle.json` on `main` is what Morph serves to every install. Upload the exact
+`.mpp` he validated — do not rebuild after validation, since a recompile changes the asset even
+when the patch logic is unchanged. Verify the published asset with `gh release view --json assets`
+(`digest` must equal `sha256sum` of the local file) and that `download_url` in
+`patches-bundle.json` matches the tag. On device the applied patch shows up as a small extra dex
+(`classes5.dex` with `LFg/o;` and `LCd/f;`), and `dumpsys package free.zona` `lastUpdateTime`
+confirms the re-patch. Morph strips `META-INF/*.SF|*.RSA` and re-signs in the APK Signing Block,
+so the absence of v1 signature files is normal. Release notes on
 GitHub Releases are written in two languages (English and Russian), following the structure of
 `PerfLite/morphe-patches` (English section with compare links, followed by `---`, then Russian
 section). The `description` field in `patches-bundle.json` is written in Russian.
