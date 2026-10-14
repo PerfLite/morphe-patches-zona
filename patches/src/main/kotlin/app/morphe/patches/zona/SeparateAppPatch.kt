@@ -87,12 +87,24 @@ val separateAppPatch = resourcePatch(
             }
         }
 
-        // The launcher icon is an adaptive one: a color drawable behind the app's own mark, so
-        // recoloring that drawable is enough to tell the two installs apart on the home screen.
+        // The adaptive launcher icon paints `color/zona_background` behind the app's mark. That color
+        // belongs to the app, so the clone gets its own: point the icon at a color drawable instead
+        // and recolor that one.
         val iconColor = iconColorOption.value
-        if (!iconColor.isNullOrBlank() && get("res/drawable/ic_launcher_background.xml").exists()) {
-            document("res/drawable/ic_launcher_background.xml").use { document ->
+        val iconBackground = "res/drawable/ic_launcher_background.xml"
+        if (!iconColor.isNullOrBlank() && iconBackground in listApkEntries()) {
+            document(iconBackground).use { document ->
                 (document.documentElement as Element).setAttribute("android:color", iconColor)
+            }
+
+            for (icon in listApkEntries("res/mipmap-anydpi-v26/")) {
+                document(icon).use { document ->
+                    val backgrounds = document.getElementsByTagName("background")
+                    for (i in 0 until backgrounds.length) {
+                        (backgrounds.item(i) as Element)
+                            .setAttribute("android:drawable", "@drawable/ic_launcher_background")
+                    }
+                }
             }
         }
     }
