@@ -97,6 +97,13 @@ Switching to it costs one final uninstall of the patched app (signature changes 
 After that official → patched and patched → official both install as updates with app data kept.
 The keystore is deliberately not committed here (the key pair is public AOSP material either way).
 
+**Not the shipped answer.** He rejected keystore swapping: Morph keeps one global keystore, so it would
+change the signature of every app he patches while helping only Zona. The solution that went into
+`separateAppPatch` ("Install as a separate app", v1.2.0) is a package rename instead — the patched copy
+gets its own package, permissions and provider authorities and installs beside the self-updating
+original, which stays the donor. Prefer that framing in docs and issues; keep the testkey recipe above
+as background, not as a recommendation.
+
 ## Release
 
 Publish the tag and the release asset only after the user has validated the patched app on
