@@ -39,9 +39,17 @@ val separateAppPatch = resourcePatch(
 
     val iconColorOption = stringOption(
         key = "iconColor",
-        default = "#FF2B1E3F",
+        default = "#FFA855F7",
+        title = "Icon mark color",
+        description = "ARGB color of the 'Z' launcher icon mark, e.g. #FFA855F7. Leave empty to keep the original blue color.",
+        required = false,
+    ) { it == null || it.isBlank() || it.matches(Regex("^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$")) }
+
+    val iconBackgroundColorOption = stringOption(
+        key = "iconBackgroundColor",
+        default = "",
         title = "Icon background color",
-        description = "ARGB color of the launcher icon background, e.g. #FF2B1E3F. The app's own mark is kept. Leave empty to keep the original icon.",
+        description = "ARGB color of the launcher icon background, e.g. #FF2B1E3F. Leave empty to keep the original dark background.",
         required = false,
     ) { it == null || it.isBlank() || it.matches(Regex("^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$")) }
 
@@ -87,14 +95,24 @@ val separateAppPatch = resourcePatch(
             }
         }
 
-        // The adaptive launcher icon paints `color/zona_background` behind the app's mark. That color
-        // belongs to the app, so the clone gets its own: point the icon at a color drawable instead
-        // and recolor that one.
+        // Recolor the 'Z' mark in the launcher icon foreground.
         val iconColor = iconColorOption.value
+        val iconForeground = "res/drawable/ic_launcher_foreground.xml"
+        if (!iconColor.isNullOrBlank() && iconForeground in listApkEntries()) {
+            document(iconForeground).use { document ->
+                val paths = document.getElementsByTagName("path")
+                for (i in 0 until paths.length) {
+                    (paths.item(i) as Element).setAttribute("android:fillColor", iconColor)
+                }
+            }
+        }
+
+        // Optionally recolor the launcher icon background.
+        val iconBackgroundColor = iconBackgroundColorOption.value
         val iconBackground = "res/drawable/ic_launcher_background.xml"
-        if (!iconColor.isNullOrBlank() && iconBackground in listApkEntries()) {
+        if (!iconBackgroundColor.isNullOrBlank() && iconBackground in listApkEntries()) {
             document(iconBackground).use { document ->
-                (document.documentElement as Element).setAttribute("android:color", iconColor)
+                (document.documentElement as Element).setAttribute("android:color", iconBackgroundColor)
             }
 
             for (icon in listApkEntries("res/mipmap-anydpi-v26/")) {
