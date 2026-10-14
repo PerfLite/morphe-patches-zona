@@ -35,11 +35,25 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
   predicate and stops, returning an empty list, as soon as candidates run out), `Ch.d.a()` is the
   scored chain (`Ch.c` multiplies each filter score by a boost, and the remembered values are
   boosted by the number of custom filters, which outranks the preferred-quality ladder).
-- `Hg.o` = ladder built from the `Preferred quality` setting (`r`, `g`, four `m` resolution-range
-  filters, `b`); `Hg.m` is a resolution range predicate, `Hg.s` a voice-over name predicate.
-- `Fg.s$a.a(String)` turns the remembered resolution string into `ResolutionKey`; an empty or
-  null string yields `ResolutionKey(0)`, which is what makes `Hg.p.a()` skip the remembered
-  resolution filter.
+- `Hg.o` = ladder built from the `Preferred quality` setting, in order: `Hg.r` (not a trailer),
+  `Hg.g` (audio language equals `ru`), `Hg.m(down2, up2)`, `Hg.m(down2, up1)`, `Hg.m(down1, up1)`,
+  `Hg.m(preferred, preferred)`, `Hg.b` (no subtitle track). `Hg.m` is a resolution range predicate
+  scoring 1.0 or 0.0, `Hg.s` a voice-over name predicate. `Ge.b.c` is the resolution number of a
+  quality (`Ge.c.a` steps up, `Ge.c.b` steps down, both clamped), so the ladder scores a stream
+  that is exactly the preferred quality 4 points, one step away 3, and the voice-over alone is
+  worth 7 — in the scored chain the voice-over always outranks the quality.
+- Because `Ch.d.b()` ANDs every predicate, putting the whole ladder into the strict chain makes it
+  miss often (a 1080p stream with a subtitle track, or a non-`ru` label, is ruled out), and a miss
+  costs a wait for all sources or the 10 second `Fg.o.f6080m` timeout before the scored chain
+  picks the voice-over instead. Keep the strict chain to the two things the user asked for.
+- `Fg.s$a.a(String)` turns a resolution string into `ResolutionKey`; its regex needs three or four
+  digits, so fewer (an empty value, or `SD` = 0) yields `ResolutionKey(0)`, which is what makes
+  `Hg.p.a()` skip the resolution filter altogether.
+- `Fg.o.<init>` is the single place in the whole app that reads the remembered resolution
+  (`Kd.i.c(J)`), and the `Fg.f$c` it builds there is used both for the filter chain and for the
+  highlighted row of the quality sheet (`Fg.f$b.c`, read by `oe.d`/`oe.g.b`). `Ge.b` is the third
+  parameter of the same constructor, so one insertion there moves the whole preference from the
+  hand-picked value to the setting.
 - `Fg.o` = the stream selection service. `Fg.g`/`Fg.o.i()`/`Fg.o.j()` show the degradation path:
   a strict miss falls back to the scored chain once all sources are processed or on timeout, so a
   strict chain that is too narrow delays the first frame instead of breaking playback.
@@ -54,6 +68,11 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
 - A single-argument `invoke-static {v2}` is dex format 35c, i.e. `FiveRegisterInstruction`, whose
   listed registers are `registerC`, `registerD`, `registerE` — there is no `registerA`.
   `ThreeRegisterInstruction` is format 23x and does not apply to invokes.
+- `replaceInstruction(index, smali)` compiles the string but inserts only its FIRST instruction,
+  and `replaceInstructions(index, smali)` deletes as many existing instructions as the new list
+  has. To add several instructions while keeping the anchored call, loop `addInstruction(index + n)`
+  instead. A silently dropped `invoke` leaves a stray `move-result-object` and an uninitialized
+  register, which the no-op dex verifier does not catch.
 
 ## Release
 
