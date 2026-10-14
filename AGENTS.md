@@ -58,5 +58,7 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
 ## Release
 
 Publish the tag and the release asset only after the user has validated the patched app on
-device; `patches-bundle.json` on `main` is what Morph serves to every install. Release notes and
-the `description` field in `patches-bundle.json` are written in Russian.
+device; `patches-bundle.json` on `main` is what Morph serves to every install. Release notes on
+GitHub Releases are written in two languages (English and Russian), following the structure of
+`PerfLite/morphe-patches` (English section with compare links, followed by `---`, then Russian
+section). The `description` field in `patches-bundle.json` is written in Russian.
