@@ -1,6 +1,6 @@
 {
   "created_at": "2026-10-14T00:00:00",
-  "description": "Add preferred quality priority patch",
+  "description": "Патч приоритета качества из настроек",
   "download_url": "https://github.com/PerfLite/morphe-patches-zona/releases/download/v1.1.0/patches-1.1.0.mpp",
   "signature_download_url": "",
   "version": "1.1.0"
