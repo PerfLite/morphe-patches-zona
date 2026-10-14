@@ -66,6 +66,25 @@ silently, and the patched one — under the name you choose — is your daily ap
 When the original updates, patch it again (Morphe takes the running APK from the phone) and install
 over the patched copy: same key, same package, so its history and settings survive.
 
+**Setup, once:**
+
+1. Download the APK you want from [julay123/mobi.zona — latest release](https://github.com/julay123/mobi.zona/releases/latest)
+   and install it. Pick one variant (RU, World or the original server set) and stay with it: all three
+   share the package `free.zona` and replace each other.
+2. Leave that install **unpatched**. It is the donor: it keeps updating itself silently, and it is the
+   source for every future patch.
+3. In Morphe add this patch source (**GitHub** → `PerfLite/morphe-patches-zona`), select the donor app
+   and tick **Install as a separate app** together with the patches you want.
+4. Fill in the two options: a unique package name (for example `free.zona.ru.android`) and an app name
+   you can tell apart on the home screen (for example `FreeZonaRu`).
+5. Patch and install the result. A second app appears — that is the one you actually use; its history,
+   bookmarks and settings are its own and are not shared with the donor.
+6. When the donor updates, repeat steps 3–5. The patched app is replaced over itself, so nothing in it
+   is lost.
+
+Do not uninstall the donor and do not patch it: without it there is nothing left to update from, and
+you would be back to hunting for a fresh APK.
+
 ## ⬇️ Usage
 
 1. Install [Morphe](https://morphe.software/).
@@ -164,6 +183,23 @@ patches are provided "as is", without warranty of any kind.
 
 Когда исходное обновилось, перепатчи его (Morphe берёт работающий APK прямо с телефона) и поставь
 поверх пропатченного: пакет и подпись те же, поэтому история и настройки сохраняются.
+
+**Как собрать один раз:**
+
+1. Скачай нужный APK из [julay123/mobi.zona — последний релиз](https://github.com/julay123/mobi.zona/releases/latest)
+   и поставь его. Выбери один вариант (RU, World или исходный набор серверов) и держись его: у всех
+   трёх пакет `free.zona`, они заменяют друг друга.
+2. Эту установку **не патчь** — это донор. Он молча обновляется сам и служит источником для каждого
+   следующего патча.
+3. В Morphe добавь источник патчей (**GitHub** → `PerfLite/morphe-patches-zona`), выбери приложение
+   донора и отметь **Install as a separate app** вместе с нужными патчами.
+4. Заполни две опции: уникальное имя пакета (например `free.zona.ru.android`) и имя приложения, чтобы
+   не путать их на рабочем столе (например `FreeZonaRu`).
+5. Запусти патчинг и поставь результат — появится второе приложение, вот им и пользуешься. Его история,
+   закладки и настройки принадлежат только ему и с донором не общие.
+6. Когда донор обновится, повтори пункты 3–5. Пропатченное заменит само себя, ничего внутри не потеряется.
+
+Донора не удаляй и не патчь: без него нечем обновляться, и придётся снова искать свежий APK на стороне.
 
 ## ⬇️ Установка
 
