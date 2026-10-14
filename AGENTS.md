@@ -35,9 +35,10 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
   predicate and stops, returning an empty list, as soon as candidates run out), `Ch.d.a()` is the
   scored chain (`Ch.c` multiplies each filter score by a boost, and the remembered values are
   boosted by the number of custom filters, which outranks the preferred-quality ladder).
-- `Hg.o` = ladder built from the `Preferred quality` setting, in order: `Hg.r` (not a trailer),
-  `Hg.g` (audio language equals `ru`), `Hg.m(down2, up2)`, `Hg.m(down2, up1)`, `Hg.m(down1, up1)`,
-  `Hg.m(preferred, preferred)`, `Hg.b` (no subtitle track). `Hg.m` is a resolution range predicate
+- `Hg.o` = ladder built from the `Preferred quality` setting, in order: `Hg.r` (stream is not a
+  trailer), `Hg.g` (stream language equals `ru`), `Hg.m(down2, up2)`, `Hg.m(down2, up1)`,
+  `Hg.m(down1, up1)`, `Hg.m(preferred, preferred)`, `Hg.b` (`rc.I.s`, an unlabelled string field
+  that must be empty). `Hg.m` is a resolution range predicate
   scoring 1.0 or 0.0, `Hg.s` a voice-over name predicate. `Ge.b.c` is the resolution number of a
   quality (`Ge.c.a` steps up, `Ge.c.b` steps down, both clamped), so the ladder scores a stream
   that is exactly the preferred quality 4 points, one step away 3, and the voice-over alone is
