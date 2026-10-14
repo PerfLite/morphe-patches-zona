@@ -30,6 +30,8 @@ A [Morphe](https://morphe.software/) patch source for **FreeZona World** (`free.
 | [Force landscape player](#force-landscape-player) | Switches to landscape orientation when movie or series playback starts. |
 | [Preferred quality priority](#preferred-quality-priority) | Plays at the quality from the "Preferred quality" setting instead of the last quality chosen by hand, and keeps the chosen voice-over. |
 | [Install as a separate app](#install-as-a-separate-app) | Installs the patched app under its own package name beside the original one, so the original keeps updating on its own. |
+| [Video buffer](#video-buffer) | Increases ExoPlayer video buffer duration and allocation to eliminate stutter and rebuffering on slow connections. |
+| [Disable analytics](#disable-analytics) | Disables internal event tracking, ClickHouse telemetry, crash reporting, and AppMetrica SDK to enhance privacy and battery life. |
 
 **Where to get the app:** the patches target the FreeZona clone published by
 [julay123/mobi.zona](https://github.com/julay123/mobi.zona) — [latest
@@ -84,6 +86,14 @@ over the patched copy: same key, same package, so its history and settings survi
 
 Do not uninstall the donor and do not patch it: without it there is nothing left to update from, and
 you would be back to hunting for a fresh APK.
+
+### Video buffer
+
+Increases the ExoPlayer ahead-buffer duration. By default, Zona buffers only up to 6 minutes of video ahead, which frequently causes pauses and stuttering during playback on slow or fluctuating mobile networks. This patch expands the maximum buffer ahead up to 20 minutes (configurable from 1 to 120 minutes) and the minimum buffer before playback considers itself adequately buffered up to 10 minutes.
+
+### Disable analytics
+
+Disables internal event tracking, ClickHouse telemetry HTTP sender, error reporting, and the AppMetrica SDK. Improves playback privacy, saves battery life, and removes background analytical network requests.
 
 ## ⬇️ Usage
 
@@ -143,6 +153,8 @@ patches are provided "as is", without warranty of any kind.
 | **Force landscape player** | Переключает плеер в альбомный режим, когда начинается воспроизведение фильма или серии. |
 | **Preferred quality priority** | Воспроизводит качество из настройки «Предпочтительное качество», а не то, что последний раз выбирали руками, и сохраняет выбранную озвучку. |
 | **Install as a separate app** | Ставит пропатченную копию под собственным именем пакета рядом с исходной, чтобы исходная продолжала обновляться сама. |
+| **Video buffer** | Увеличивает длительность и лимит памяти видеобуфера ExoPlayer для устранения лагов и подгрузок на медленном интернете. |
+| **Disable analytics** | Отключает внутреннюю аналитику, отправку телеметрии в ClickHouse, логирование ошибок и AppMetrica SDK для приватности и экономии заряда. |
 
 **Где брать приложение:** патчи рассчитаны на FreeZona из
 [julay123/mobi.zona](https://github.com/julay123/mobi.zona) — в [последнем релизе](https://github.com/julay123/mobi.zona/releases/latest)
@@ -194,6 +206,14 @@ patches are provided "as is", without warranty of any kind.
 6. Когда донор обновится, повтори пункты 3–5. Пропатченное заменит само себя, ничего внутри не потеряется.
 
 Донора не удаляй и не патчь: без него нечем обновляться, и придётся снова искать свежий APK на стороне.
+
+### Video buffer
+
+Увеличивает длительность упреждающего буфера ExoPlayer. По умолчанию Zona держит в буфере не более 6 минут видео, что при нестабильном или медленном интернете приводит к частым остановкам на буферизацию. Патч позволяет увеличить максимальный буфер до 20 минут (настраивается от 1 до 120 мин) и минимальный буфер достаточной готовности до 10 минут.
+
+### Disable analytics
+
+Нейтрализует сбор событий приложения, HTTP-отправку метрик в ClickHouse, трекер падений и инициализацию SDK AppMetrica. Повышает конфиденциальность, экономит заряд батареи и устраняет фоновый паразитный трафик.
 
 ## ⬇️ Установка
 
