@@ -29,9 +29,16 @@ A [Morphe](https://morphe.software/) patch source for **FreeZona World** (`free.
 |-------|-------------|
 | [Force landscape player](#force-landscape-player) | Switches to landscape orientation when movie or series playback starts. |
 | [Preferred quality priority](#preferred-quality-priority) | Plays at the quality from the "Preferred quality" setting instead of the last quality chosen by hand, and keeps the chosen voice-over. |
+| [Install as a separate app](#install-as-a-separate-app) | Installs the patched app under its own package name beside the original one, so the original keeps updating on its own. |
 
-**Supported app version:** FreeZona World `3.0.75` (versionCode `1075`). This is the only version
-the patches declare compatibility with, so other versions are unsupported and untested.
+**Where to get the app:** the patches target the FreeZona clone published by
+[julay123/mobi.zona](https://github.com/julay123/mobi.zona) — [latest
+release](https://github.com/julay123/mobi.zona/releases/latest) carries the three variants (RU,
+World, original server set) for every Zona version. All three share the package `free.zona`, so they
+replace each other; pick one and keep it as the copy that updates itself.
+
+**Supported app version:** FreeZona `3.0.75` (versionCode `1075`). This is the only version the
+patches declare compatibility with, so other versions are unsupported and untested.
 
 ### Force landscape player
 
@@ -48,6 +55,16 @@ chose.
 > Works at less than 100%. When a title has no stream at the chosen quality with the chosen
 > voice-over (older series usually have no 1080p), the player takes the closest available option,
 > and the first switch to such an episode can take a few seconds while the sources load.
+
+### Install as a separate app
+
+Off by default. A patched app is signed by Morphe, not by the app's own key, so it can never receive
+the app's own updates. This patch gives the patched copy its own package name, permissions and
+provider authorities, so both live on the phone at the same time: the original keeps updating
+silently, and the patched one — under the name you choose — is your daily app.
+
+When the original updates, patch it again (Morphe takes the running APK from the phone) and install
+over the patched copy: same key, same package, so its history and settings survive.
 
 ## ⬇️ Usage
 
@@ -112,8 +129,14 @@ patches are provided "as is", without warranty of any kind.
 |------|----------|
 | **Force landscape player** | Переключает плеер в альбомный режим, когда начинается воспроизведение фильма или серии. |
 | **Preferred quality priority** | Воспроизводит качество из настройки «Предпочтительное качество», а не то, что последний раз выбирали руками, и сохраняет выбранную озвучку. |
+| **Install as a separate app** | Ставит пропатченную копию под собственным именем пакета рядом с исходной, чтобы исходная продолжала обновляться сама. |
 
-**Поддерживаемая версия:** FreeZona World `3.0.75` (versionCode `1075`). Это единственная версия,
+**Где брать приложение:** патчи рассчитаны на FreeZona из
+[julay123/mobi.zona](https://github.com/julay123/mobi.zona) — в [последнем релизе](https://github.com/julay123/mobi.zona/releases/latest)
+лежат три варианта (RU, World и исходный набор серверов) под каждую версию Zona. Пакет у всех трёх
+один — `free.zona`, поэтому они заменяют друг друга: выбери один и держи как обновляемый.
+
+**Поддерживаемая версия:** FreeZona `3.0.75` (versionCode `1075`). Это единственная версия,
 для которой патчи объявляют совместимость, поэтому остальные не поддерживаются и не проверены.
 
 ### Force landscape player
@@ -130,6 +153,17 @@ patches are provided "as is", without warranty of any kind.
 > Работает не на 100%. Если у тайтла нет потока выбранного качества с выбранной озвучкой (у старых
 > сериалов чаще всего нет 1080p), плеер берёт ближайший доступный вариант, а первое переключение на
 > такую серию может занять несколько секунд — пока источники прогрузятся.
+
+### Install as a separate app
+
+По умолчанию выключен. Пропатченное приложение подписывает ключом Morphe, а не ключом приложения,
+поэтому собственные обновления ему не приходят. Патч даёт пропатченной копии своё имя пакета, свои
+разрешения и свои authority у провайдеров, так что оба приложения живут на телефоне одновременно:
+исходное молча обновляется, а пропатченное — под тем именем, которое ты укажешь, — и есть рабочий
+вариант.
+
+Когда исходное обновилось, перепатчи его (Morphe берёт работающий APK прямо с телефона) и поставь
+поверх пропатченного: пакет и подпись те же, поэтому история и настройки сохраняются.
 
 ## ⬇️ Установка
 
