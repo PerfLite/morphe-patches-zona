@@ -37,6 +37,14 @@ val separateAppPatch = resourcePatch(
         required = true,
     )
 
+    val iconColorOption = stringOption(
+        key = "iconColor",
+        default = "#FF2B1E3F",
+        title = "Icon background color",
+        description = "ARGB color of the launcher icon background, e.g. #FF2B1E3F. The app's own mark is kept. Leave empty to keep the original icon.",
+        required = false,
+    ) { it == null || it.isBlank() || it.matches(Regex("^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$")) }
+
     finalize {
         val originalPackageName = packageMetadata.packageName
         val packageName = packageNameOption.value!!
@@ -76,6 +84,15 @@ val separateAppPatch = resourcePatch(
             val applications = document.getElementsByTagName("application")
             for (i in 0 until applications.length) {
                 (applications.item(i) as Element).setAttribute("android:label", appName)
+            }
+        }
+
+        // The launcher icon is an adaptive one: a color drawable behind the app's own mark, so
+        // recoloring that drawable is enough to tell the two installs apart on the home screen.
+        val iconColor = iconColorOption.value
+        if (!iconColor.isNullOrBlank() && get("res/drawable/ic_launcher_background.xml").exists()) {
+            document("res/drawable/ic_launcher_background.xml").use { document ->
+                (document.documentElement as Element).setAttribute("android:color", iconColor)
             }
         }
     }
