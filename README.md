@@ -68,6 +68,30 @@ Output: `patches/build/libs/patches-<version>.mpp`. When releasing, bump `versio
 `gradle.properties` and mirror it in `patches-bundle.json` (`version`, `download_url` tag,
 `created_at`, `description`), then publish the tag with the `.mpp` attached.
 
+## 🔑 Signing and Zona updates
+
+Morphe signs every patched APK with its own key (`CN=Morphe`), created once on the first patch and
+kept in Morphe's private storage. The official FreeZona World APK is signed with the public AOSP
+`testkey` (`CN=Android`), so an in-app Zona update cannot install over a patched install, and a
+patched install cannot update an official one. This is normal for patched apps and has nothing to do
+with these patches: when Zona releases a new version, uninstall the old one, patch the new APK and
+install it — Zona's own settings are lost in the process.
+
+To keep the in-app updater working instead, import a keystore built from that AOSP `testkey` pair
+(Settings → System → Import keystore) **before** patching, and Morphe will sign with the same key the
+official APKs use. Then official updates and re-patched builds install over each other with data
+kept, and after an update you only re-patch — Morphe takes the running APK from the phone. Use alias
+and key password `Morphe` and leave the keystore password empty; those are the values Morphe tries
+automatically.
+
+> [!CAUTION]
+> Morphe keeps one keystore for everything it patches, so importing changes the signature of all your
+> future patches, not only Zona. Other apps are signed by their own vendors (Google, VK, Telegram),
+> so the AOSP key gives them nothing back — while the next patch of any of them will refuse to install
+> over the currently patched copy until you uninstall it. If you patch more than Zona, keep the
+> default key in your main Morphe and import the AOSP keystore only into a separate Morphe copy used
+> for Zona (for example inside Samsung Secure Folder), which keeps its own keystore.
+
 ## ⚖️ License
 
 GPL-3.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
@@ -125,6 +149,30 @@ Morphe читает [`patches-bundle.json`](patches-bundle.json) из этого
 На выходе: `patches/build/libs/patches-<version>.mpp`. При релизе поднимите `version` в
 `gradle.properties` и зеркальте её в `patches-bundle.json` (`version`, тег в `download_url`,
 `created_at`, `description`), после чего опубликуйте тег с приложенным `.mpp`.
+
+## 🔑 Подпись и обновления Zona
+
+Morphe подписывает каждый пропатченный APK своим ключом (`CN=Morphe`): он создаётся один раз при
+первом патче и хранится в приватном каталоге Morphe. Официальный FreeZona World подписан публичным
+AOSP `testkey` (`CN=Android`), поэтому официальное обновление не ставится поверх пропатченного, а
+пропатченный — поверх официального. Это обычная ситуация для любых пропатченных приложений и к нашим
+патчам отношения не имеет: вышла новая Zona → удаляем старую, патчим новый APK, ставим; настройки самой
+Zona при этом теряются.
+
+Если нужен работающий апдейт внутри приложения, — импортируй keystore, собранный из этой пары AOSP
+`testkey` (Settings → System → Import keystore) **до** патча, и Morphe будет подписывать тем же ключом,
+что и официальные сборки. Тогда официальные обновления и перепатченные сборки ставятся друг поверх
+друга без потери данных, а после обновления остаётся только перепатчить: Morphe берёт работающий APK
+прямо с телефона. Алиас и пароль ключа — `Morphe`, пароль хранилища оставь пустым: именно эти значения
+Morphe подставляет сам.
+
+> [!CAUTION]
+> Keystore у Morphe один на все патчи, поэтому импорт меняет подпись всех будущих сборок, а не только
+> Zona. Остальные приложения подписаны своими вендорами (Google, VK, Telegram), так что AOSP-ключ им
+> ничего не даёт взамен — зато следующий патч любого из них не встанет поверх уже пропатченного, пока
+> его не удалишь. Если патчишь не только Zona, держи в основном Morphe свой ключ, а AOSP keystore
+> импортируй только в отдельную копию Morphe для Zona (например в Samsung Secure Folder) — у неё свой
+> keystore.
 
 ## ⚖️ Лицензия
 
