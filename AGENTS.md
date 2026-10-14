@@ -75,6 +75,28 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
   instead. A silently dropped `invoke` leaves a stray `move-result-object` and an uninitialized
   register, which the no-op dex verifier does not catch.
 
+## Signing and app updates
+
+The distributed FreeZona World APK is signed with the **AOSP `testkey`** pair
+(`build/make/target/product/security/testkey.pk8` / `.x509.pem`, cert SHA-256
+`a40da80a59d170caa950cf15c18c454d47a39b26989d8b640ecd745ba71bf5dc`, the value
+`ZonaCompatibility.signatures` expects, valid until 2035-07-17). That is why its in-app "обновить"
+button installs updates in place.
+
+Morph signs its output with its own persistent key (`CN=Morphe`, BKS at `signing/morphe.keystore`
+in its private dir), so a patched install can never receive an official update. To keep the
+in-app updater working, sign with the AOSP testkey instead: build a BKS from that pair with
+`ApkSigner.newKeyStore(...)` and `store(out, null)` (no store password), alias and key password
+both `Morphe` — those are in Morph's auto-try lists (`ImportExportViewModel.kt:645-646`), so
+Settings → System → Import keystore takes the file in one tap without asking credentials.
+Verified: such a keystore loads through `ApkSigner.readKeyStore(stream, null)`, and
+`ApkUtils.signApk` with it produces an APK that `apksigner` reports as v1+v2+v3 with
+`CN=Android` and the matching digest.
+
+Switching to it costs one final uninstall of the patched app (signature changes from `CN=Morphe`).
+After that official → patched and patched → official both install as updates with app data kept.
+The keystore is deliberately not committed here (the key pair is public AOSP material either way).
+
 ## Release
 
 Publish the tag and the release asset only after the user has validated the patched app on
