@@ -58,4 +58,5 @@ Obfuscated with R8; the useful classes are two-letter packages. Each decompiled 
 ## Release
 
 Publish the tag and the release asset only after the user has validated the patched app on
-device; `patches-bundle.json` on `main` is what Morph serves to every install.
+device; `patches-bundle.json` on `main` is what Morph serves to every install. Release notes and
+the `description` field in `patches-bundle.json` are written in Russian.
