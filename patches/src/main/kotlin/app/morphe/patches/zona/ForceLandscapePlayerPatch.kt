@@ -31,7 +31,7 @@ val forceLandscapePlayerPatch = bytecodePatch(
     description = "Switches to landscape orientation when movie or series playback starts.",
     default = true,
 ) {
-    compatibleWith(ZONA_COMPATIBILITY)
+    compatibleWith(*ZONA_COMPATIBILITY)
 
     execute {
         SetSensorLandscapeFingerprint.method.apply {

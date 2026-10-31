@@ -31,7 +31,7 @@ val videoBufferPatch = bytecodePatch(
     description = "Increases ExoPlayer video buffer duration to eliminate stutter and rebuffering on slow connections.",
     default = true,
 ) {
-    compatibleWith(ZONA_COMPATIBILITY)
+    compatibleWith(*ZONA_COMPATIBILITY)
 
     val maxBufferMinutesOption = intOption(
         key = "maxBufferMinutes",
