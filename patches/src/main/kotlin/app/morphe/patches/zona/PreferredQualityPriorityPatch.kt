@@ -84,7 +84,7 @@ val preferredQualityPriorityPatch = bytecodePatch(
     description = "Plays at the quality from \"Preferred quality\" instead of the last quality chosen by hand, and waits for preferred quality sources before falling back.",
     default = true,
 ) {
-    compatibleWith(*ZONA_COMPATIBILITY)
+    compatibleWith(ZONA_COMPATIBILITY)
 
     val waitTimeoutSecondsOption = intOption(
         key = "waitTimeoutSeconds",

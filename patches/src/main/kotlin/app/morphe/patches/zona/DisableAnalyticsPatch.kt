@@ -40,7 +40,7 @@ val disableAnalyticsPatch = bytecodePatch(
     description = "Disables internal event tracking, ClickHouse telemetry, crash reporting, and AppMetrica SDK to enhance privacy and battery life.",
     default = true,
 ) {
-    compatibleWith(*ZONA_COMPATIBILITY)
+    compatibleWith(ZONA_COMPATIBILITY)
 
     execute {
         // 1. Neutralize Zona's internal analytics dispatcher (Lic/b)

@@ -19,7 +19,7 @@ val separateAppPatch = resourcePatch(
     description = "Installs the patched app beside the original one under its own package name and app name, so the original keeps updating on its own.",
     default = false,
 ) {
-    compatibleWith(*ZONA_COMPATIBILITY)
+    compatibleWith(ZONA_COMPATIBILITY)
 
     val packageNameOption = stringOption(
         key = "packageName",
