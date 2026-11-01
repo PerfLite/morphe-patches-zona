@@ -24,46 +24,14 @@ private object ClickHouseSenderLegacyFingerprint : Fingerprint(
     returnType = "Ljava/lang/Object;",
 )
 
-private object AppMetricaActivateFingerprint : Fingerprint(
+private object AppMetricaFingerprint : Fingerprint(
     definingClass = "Lio/appmetrica/analytics/AppMetrica;",
-    name = "activate",
-    parameters = listOf("Landroid/content/Context;", "Lio/appmetrica/analytics/AppMetricaConfig;"),
-    returnType = "V",
+    name = "reportEvent",
 )
 
-private object AppMetricaActivateReporterFingerprint : Fingerprint(
-    definingClass = "Lio/appmetrica/analytics/AppMetrica;",
-    name = "activateReporter",
-    parameters = listOf("Landroid/content/Context;", "Lio/appmetrica/analytics/ReporterConfig;"),
-    returnType = "V",
-)
-
-private object AppMetricaSetDataSendingEnabledFingerprint : Fingerprint(
-    definingClass = "Lio/appmetrica/analytics/AppMetrica;",
-    name = "setDataSendingEnabled",
-    parameters = listOf("Z"),
-    returnType = "V",
-)
-
-private object AppMetricaLibraryAdapterActivateFingerprint : Fingerprint(
-    definingClass = "Lio/appmetrica/analytics/AppMetricaLibraryAdapter;",
-    name = "activate",
-    parameters = listOf("Landroid/content/Context;", "Lio/appmetrica/analytics/AppMetricaLibraryAdapterConfig;"),
-    returnType = "V",
-)
-
-private object AppMetricaLibraryAdapterReportEventFingerprint : Fingerprint(
+private object AppMetricaLibraryAdapterFingerprint : Fingerprint(
     definingClass = "Lio/appmetrica/analytics/AppMetricaLibraryAdapter;",
     name = "reportEvent",
-    parameters = listOf("Ljava/lang/String;", "Ljava/lang/String;", "Ljava/lang/String;"),
-    returnType = "V",
-)
-
-private object AppMetricaLibraryAdapterSubscribeFingerprint : Fingerprint(
-    definingClass = "Lio/appmetrica/analytics/AppMetricaLibraryAdapter;",
-    name = "subscribeForAutoCollectedData",
-    parameters = listOf("Landroid/content/Context;", "Ljava/lang/String;"),
-    returnType = "V",
 )
 
 @Suppress("unused")
@@ -96,17 +64,30 @@ val disableAnalyticsPatch = bytecodePatch(
             }
         }
 
-        // 3. Neutralize AppMetrica SDK initialization and data reporting
-        listOf(
-            AppMetricaActivateFingerprint,
-            AppMetricaActivateReporterFingerprint,
-            AppMetricaSetDataSendingEnabledFingerprint,
-            AppMetricaLibraryAdapterActivateFingerprint,
-            AppMetricaLibraryAdapterReportEventFingerprint,
-            AppMetricaLibraryAdapterSubscribeFingerprint,
-        ).forEach { fingerprint ->
-            fingerprint.matchOrNull()?.method?.apply {
-                replaceInstruction(0, "return-void")
+        // 3. Neutralize AppMetrica telemetry reporting without breaking SDK initialization
+        AppMetricaFingerprint.classDefOrNull?.methods?.forEach { method ->
+            val name = method.name
+            if (method.returnType == "V" && (
+                name.startsWith("report") ||
+                name == "sendEventsBuffer" ||
+                name == "pauseSession" ||
+                name == "resumeSession"
+            )) {
+                method.apply {
+                    replaceInstruction(0, "return-void")
+                }
+            }
+        }
+
+        AppMetricaLibraryAdapterFingerprint.classDefOrNull?.methods?.forEach { method ->
+            val name = method.name
+            if (method.returnType == "V" && (
+                name == "reportEvent" ||
+                name == "subscribeForAutoCollectedData"
+            )) {
+                method.apply {
+                    replaceInstruction(0, "return-void")
+                }
             }
         }
     }
